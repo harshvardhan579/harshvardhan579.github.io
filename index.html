@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exploration of Robot Swarm with Obstacles</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+    <h1>Exploration of Robot Swarm with Obstacles</h1>
+</header>
+
+<div class="container">
+    <h2>Team Members:</h2>
+    <ul>
+        <li>Jared Nobles</li>
+        <li>Harshvardhan Singh</li>
+        <li>Sam Siock</li>
+    </ul>
+
+    <h2>Project Description:</h2>
+    <p>Our project is based on the Freeze Tag Problem (FTP), which is an optimization problem given a swarm of robots that involves using an initial “awake” robot to wake the remaining set of “asleep” robots in the shortest possible time. We would like to expand upon this problem by not just implementing it in an empty plane, but by adding obstacles to the space as well as terrain that might slow movement. The idea is to simulate the problem in a more realistic space. The main adjustments would be implementing new data structures to represent the space and using a search algorithm instead of euclidean distance.</p>
+
+    <p>We plan on implementing standard algorithms like greedy static and dynamic and random selection. We would like to implement the convex hull solution but that would likely require reworking due to the obstacles in our space; we will see if we can actually implement it effectively. We have read about another algorithm that uses clustering to supplement a divide and conquer method so we would like to look into implementing that as well.</p>
+
+    <p>Another potential idea we have would be to implement a field of view for each robot, either as a cone or a circle, that would only allow a robot to see other robots within the field of view. Therefore, a robot without another robot in the field of view would need to search the space until it could find a robot it can see.</p>
+</div>
+
+</body>
+</html>
