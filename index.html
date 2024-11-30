@@ -2,74 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exploration of Robot Swarm with Obstacles</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .container {
-            display: flex;
-            max-width: 1200px;
-            width: 100%;
-            margin: 20px;
-            background-color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .text-section {
-            padding: 20px;
-            width: 60%;
-            box-sizing: border-box;
-        }
-
-        .animation-section {
-            width: 40%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #e6e6e6;
-        }
-
-        h1 {
-            color: #4CAF50;
-            font-size: 1.8em;
-            margin-bottom: 0.5em;
-        }
-
-        h2 {
-            color: #4CAF50;
-            font-size: 1.3em;
-            margin-top: 1em;
-            margin-bottom: 0.5em;
-        }
-
-        p, ul {
-            line-height: 1.6;
-        }
-
-        ul {
-            padding-left: 20px;
-            list-style-type: disc;
-        }
-
-        canvas {
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -85,7 +20,7 @@
         </ul>
 
         <h2>Project Description:</h2>
-        <p>Our project is based on the Freeze Tag Problem (FTP), which is an optimization problem given a swarm of robots that involves using an initial “awake” robot to wake the remaining set of “asleep” robots in the shortest possible time. We would like to expand upon this problem by not just implementing it in an empty plane, but by adding obstacles to the space as well as terrain that might slow movement. The idea is to simulate the problem in a more realistic space. The main adjustments would be implementing new data structures to represent the space and using a search algorithm instead of euclidean distance.</p>
+        <p>Our project is based on the Freeze Tag Problem (FTP), which is an optimization problem given a swarm of robots that involves using an initial “awake” robot to wake the remaining set of “asleep” robots in the shortest possible time. We would like to expand upon this problem by not just implementing it in an empty plane, but by adding obstacles to the space as well as terrain that might slow movement. The idea is to simulate the problem in a more realistic space. The main adjustments would be implementing new data structures to represent the space and using a search algorithm instead of Euclidean distance.</p>
 
         <p>We plan on implementing standard algorithms like greedy static and dynamic and random selection. We would like to implement the convex hull solution but that would likely require reworking due to the obstacles in our space; we will see if we can actually implement it effectively. We have read about another algorithm that uses clustering to supplement a divide and conquer method so we would like to look into implementing that as well.</p>
 
@@ -93,108 +28,30 @@
     </div>
 
     <div class="animation-section">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-        <script>
-            // Scene setup
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-            camera.position.z = 20;
-
-            const renderer = new THREE.WebGLRenderer();
-            renderer.setSize(300, 300); // Set size to fit the section
-            document.querySelector('.animation-section').appendChild(renderer.domElement);
-
-            // Lighting
-            const light = new THREE.DirectionalLight(0xffffff, 1);
-            light.position.set(10, 10, 10).normalize();
-            scene.add(light);
-
-            // Create obstacles
-            const obstacles = [];
-            for (let i = 0; i < 3; i++) {
-                const geometry = new THREE.BoxGeometry(1, 1, 1);
-                const material = new THREE.MeshStandardMaterial({ color: 0x8b0000 });
-                const obstacle = new THREE.Mesh(geometry, material);
-                obstacle.position.set(Math.random() * 10 - 5, Math.random() * 10 - 5, 0);
-                obstacles.push(obstacle);
-                scene.add(obstacle);
-            }
-
-            // Create robots
-            const robots = [];
-            for (let i = 0; i < 10; i++) {
-                const geometry = new THREE.SphereGeometry(0.5, 32, 32);
-                const material = new THREE.MeshStandardMaterial({ color: 0x0000ff });
-                const robot = new THREE.Mesh(geometry, material);
-                robot.position.set(Math.random() * 10 - 5, Math.random() * 10 - 5, 0);
-                robots.push({ mesh: robot, isAwake: false });
-                scene.add(robot);
-            }
-
-            // Set up the awake robot
-            const awakeRobot = new THREE.Mesh(
-                new THREE.SphereGeometry(0.6, 32, 32),
-                new THREE.MeshStandardMaterial({ color: 0x00ff00 })
-            );
-            awakeRobot.position.set(0, 0, 0);
-            scene.add(awakeRobot);
-
-            // Helper function to check for obstacles and steer around them
-            function avoidObstacles(target, robot, speed = 0.05) {
-                const direction = new THREE.Vector3().subVectors(target.position, robot.position).normalize();
-                
-                obstacles.forEach(obstacle => {
-                    const distance = robot.position.distanceTo(obstacle.position);
-                    if (distance < 1.5) {
-                        const avoidance = new THREE.Vector3().subVectors(robot.position, obstacle.position).normalize();
-                        direction.add(avoidance.multiplyScalar(0.5));
-                    }
-                });
-
-                robot.position.addScaledVector(direction.normalize(), speed);
-            }
-
-            // Animation loop
-            let currentTargetIndex = 0;
-            function animate() {
-                requestAnimationFrame(animate);
-
-                // Awake robot logic to reach and awaken still robots with obstacle avoidance
-                if (currentTargetIndex < robots.length) {
-                    const targetRobot = robots[currentTargetIndex].mesh;
-                    avoidObstacles(targetRobot, awakeRobot);
-
-                    // Check distance to awaken robot
-                    if (awakeRobot.position.distanceTo(targetRobot.position) < 0.3) {
-                        robots[currentTargetIndex].isAwake = true;
-                        targetRobot.material.color.set(0x00ff00); // Change color to indicate "awake"
-                        currentTargetIndex++;
-                    }
-                }
-
-                // Move awakened robots
-                robots.forEach(robotObj => {
-                    if (robotObj.isAwake) {
-                        const randomDir = new THREE.Vector3(
-                            Math.random() - 0.5,
-                            Math.random() - 0.5,
-                            0
-                        ).normalize();
-                        robotObj.mesh.position.addScaledVector(randomDir, 0.01);
-                    }
-                });
-
-                renderer.render(scene, camera);
-            }
-            animate();
-
-            // Handle window resize
-            window.addEventListener('resize', () => {
-                renderer.setSize(300, 300);
-            });
-        </script>
+        <!-- Controls -->
+        <div class="controls">
+            <button id="addObstacleBtn" class="active">Add Obstacles</button>
+            <button id="addRobotBtn">Add Robots</button>
+            <button id="startBtn">Start Awakening</button>
+            <button id="resetBtn">Reset</button>
+            <select id="algorithmSelect">
+                <option value="greedyStatic">Greedy Static</option>
+                <option value="greedyDynamic">Greedy Dynamic</option>
+                <option value="clustering">Clustering</option>
+            </select>
+        </div>
+        <div class="instructions">
+            Click on the canvas to add items. Click again on the active button to deselect. Select a robot to start. Choose an algorithm from the dropdown.
+        </div>
+        <!-- The Three.js Canvas will be appended here by script.js -->
     </div>
 </div>
 
+<!-- Include Three.js library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<!-- Link to your external JavaScript file -->
+<script src="script.js"></script>
+
 </body>
 </html>
+
