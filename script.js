@@ -19,6 +19,10 @@ let robots = [];
 let awakeRobots = []; // Array to hold awake robots
 let isAwakening = false;
 
+// Variables to hold the initial state
+let initialObstacles = [];
+let initialRobots = [];
+
 // Interaction mode
 let mode = 'obstacle'; // 'obstacle', 'robot', or null
 
@@ -26,10 +30,17 @@ let mode = 'obstacle'; // 'obstacle', 'robot', or null
 const addObstacleBtn = document.getElementById('addObstacleBtn');
 const addRobotBtn = document.getElementById('addRobotBtn');
 const startBtn = document.getElementById('startBtn');
+const resetAnimationBtn = document.getElementById('resetAnimationBtn');
 const resetBtn = document.getElementById('resetBtn');
 
 // Algorithm selection
 const algorithmSelect = document.getElementById('algorithmSelect');
+
+// **Steps counter variable**
+let steps = 0; // Initialize steps counter
+
+// **Get the steps display element**
+const stepsDisplay = document.getElementById('stepsDisplay');
 
 // Grid dimensions
 const GRID_SIZE = 40; // Define the size of the grid (increase for better resolution)
@@ -191,7 +202,13 @@ addRobotBtn.addEventListener('click', () => {
 // Start Awakening Button Event
 startBtn.addEventListener('click', () => {
     if (!isAwakening && selectedRobot) {
+        steps = 0; // Reset steps counter when starting a new awakening
+        stepsDisplay.textContent = steps;
+
         isAwakening = true;
+        // Save the initial state before starting the awakening
+        saveInitialState();
+
         // Find the robot object in the robots array corresponding to the selectedRobot mesh
         const startingRobot = robots.find((r) => r.mesh === selectedRobot);
         if (startingRobot) {
@@ -204,10 +221,116 @@ startBtn.addEventListener('click', () => {
     }
 });
 
-// Reset Button Event
+// Reset Animation Button Event
+resetAnimationBtn.addEventListener('click', () => {
+    if (isAwakening || awakeRobots.length > 0) {
+        resetToInitialState();
+    }
+});
+
+// **Reset All Button Event**
 resetBtn.addEventListener('click', () => {
     resetScene();
+    steps = 0; // **Reset steps counter when resetting all**
+    stepsDisplay.textContent = steps; // **Update steps display**
 });
+
+// Function to save the initial state
+function saveInitialState() {
+    // Deep copy obstacles
+    initialObstacles = obstacles.map((obs) => {
+        return {
+            position: obs.position.clone(),
+        };
+    });
+
+    // Deep copy robots
+    initialRobots = robots.map((robot) => {
+        return {
+            position: robot.mesh.position.clone(),
+        };
+    });
+}
+
+// Function to save the initial state
+function saveInitialState() {
+    // Deep copy obstacles
+    initialObstacles = obstacles.map((obs) => {
+        return {
+            position: obs.position.clone(),
+        };
+    });
+
+    // Deep copy robots
+    initialRobots = robots.map((robot) => {
+        return {
+            position: robot.mesh.position.clone(),
+        };
+    });
+}
+
+// Function to reset to the initial state
+function resetToInitialState() {
+    // Remove all obstacles from scene
+    obstacles.forEach(obstacle => {
+        scene.remove(obstacle);
+    });
+    obstacles = [];
+
+    // Remove all robots from scene
+    robots.forEach(robotObj => {
+        scene.remove(robotObj.mesh);
+    });
+    robots = [];
+
+    // Clear awakeRobots array
+    awakeRobots = [];
+
+    // Reset grid
+    for (let x = 0; x < GRID_SIZE; x++) {
+        for (let y = 0; y < GRID_SIZE; y++) {
+            grid[x][y] = 0;
+        }
+    }
+
+    // Reset clusters
+    clusters = [];
+    clustersInitialized = false;
+
+    // Reset targetedRobots set
+    targetedRobots = new Set();
+
+    // Reset flags and selections
+    isAwakening = false;
+
+    // Reset selected robot
+    if (selectedRobot) {
+        selectedRobot.material.emissive.setHex(0x000000);
+        selectedRobot = null;
+    }
+
+    // Reset interaction mode
+    mode = null;
+    addObstacleBtn.classList.remove('active');
+    addRobotBtn.classList.remove('active');
+
+    // Restore obstacles
+    initialObstacles.forEach((obsData) => {
+        addObstacle(obsData.position.x, obsData.position.y);
+    });
+
+    // Restore robots
+    initialRobots.forEach((robotData) => {
+        addRobot(robotData.position.x, robotData.position.y);
+    });
+
+    // Reset steps counter
+    steps = 0;
+    stepsDisplay.textContent = steps;
+
+    // Re-initialize A* grid
+    aStar.grid = grid;
+}
 
 // Raycaster for mouse interaction
 const raycaster = new THREE.Raycaster();
@@ -330,6 +453,10 @@ function resetScene() {
     mode = null;
     addObstacleBtn.classList.remove('active');
     addRobotBtn.classList.remove('active');
+
+    // Clear initial state
+    initialObstacles = [];
+    initialRobots = [];
 }
 
 // Assign paths using Greedy Static
@@ -433,21 +560,28 @@ function assignPathsClustering() {
                     robotObj.path = path.map((p) => gridToWorld(p));
                     robotObj.pathIndex = 0;
                     targetedRobots.add(targetRobot);
+                } else {
+                    // If no path is found, remove the robot from the cluster to prevent infinite loops
+                    robotObj.cluster = robotObj.cluster.filter((r) => r !== targetRobot);
+                    if (robotObj.cluster.length === 0) {
+                        robotObj.cluster = null;
+                    }
                 }
             }
         }
     });
 }
 
-// Function to cluster robots (simple proximity-based clustering)
+// Function to cluster robots (improved)
 function clusterRobots() {
     const clusters = [];
     const unclustered = robots.filter((r) => !r.isAwake);
+    const threshold = 10; // Adjusted distance threshold for clustering
     while (unclustered.length > 0) {
         const cluster = [unclustered.pop()];
         for (let i = unclustered.length - 1; i >= 0; i--) {
             const dist = cluster[0].mesh.position.distanceTo(unclustered[i].mesh.position);
-            if (dist < 5) { // Adjust the distance threshold as needed
+            if (dist < threshold) {
                 cluster.push(unclustered.splice(i, 1)[0]);
             }
         }
@@ -461,6 +595,9 @@ function animate() {
     requestAnimationFrame(animate);
 
     if (isAwakening) {
+        steps++; // **Increment steps counter**
+        stepsDisplay.textContent = steps; // **Update the steps display**
+
         const algorithm = algorithmSelect.value;
         if (algorithm === 'greedyStatic') {
             assignPathsGreedyStatic();
@@ -469,6 +606,8 @@ function animate() {
         } else if (algorithm === 'clustering') {
             assignPathsClustering();
         }
+
+        let allRobotsAwake = true; // **Flag to check if all robots are awake**
 
         awakeRobots.forEach((robotObj) => {
             if (robotObj.path && robotObj.pathIndex < robotObj.path.length) {
@@ -511,10 +650,25 @@ function animate() {
                 }
             }
         });
+
+        // **Check if all robots are awake**
+        robots.forEach((robot) => {
+            if (!robot.isAwake) {
+                allRobotsAwake = false;
+            }
+        });
+
+        if (allRobotsAwake) {
+            isAwakening = false; // **Stop the awakening process**
+            // **Display completion message**
+            stepsDisplay.textContent = `${steps} (Awakening Complete)`;
+        }
     }
 
     renderer.render(scene, camera);
 }
+
+// Start the animation loop
 animate();
 
 // Handle window resize

@@ -1,22 +1,18 @@
-/* Basic styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f4f4f9;
     color: #333;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 .container {
     display: flex;
+    flex-direction: column; 
     max-width: 1200px;
     width: 100%;
-    margin: 20px;
+    margin: 20px auto; 
     background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
@@ -25,19 +21,29 @@ body {
 
 .text-section {
     padding: 20px;
-    width: 60%;
     box-sizing: border-box;
+    width: 100%;
 }
 
 .animation-section {
     position: relative;
-    width: 40%;
+    width: 100%; 
     display: flex;
     flex-direction: column;
     align-items: center;
     background-color: #e6e6e6;
     padding: 10px;
     box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+    .container {
+        flex-direction: row; 
+    }
+
+    .text-section, .animation-section {
+        width: 50%;
+    }
 }
 
 h1 {
@@ -64,21 +70,21 @@ ul {
 
 canvas {
     width: 100%;
-    height: 300px;
+    height: auto;
+    max-height: 500px;
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #f0f0f0;
 }
 
-/* Styles for controls */
 .controls {
     margin-top: 10px;
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
+    justify-content: center; 
 }
 
-.controls button {
+.controls button, .controls select {
     margin: 5px;
     padding: 10px 15px;
     font-size: 1em;
@@ -90,20 +96,13 @@ canvas {
     transition: background-color 0.3s, color 0.3s;
 }
 
-.controls button.active, .controls button:hover {
+.controls button.active, .controls button:hover, .controls select:hover {
     background-color: #4CAF50;
     color: #fff;
 }
 
 .controls select {
-    margin: 5px;
-    padding: 10px 15px;
-    font-size: 1em;
-    border: 1px solid #4CAF50;
-    color: #4CAF50;
-    border-radius: 4px;
     background-color: #fff;
-    transition: background-color 0.3s, color 0.3s;
 }
 
 .controls select:focus {
@@ -111,10 +110,24 @@ canvas {
     border-color: #4CAF50;
 }
 
-/* Instructions */
 .instructions {
     font-size: 0.9em;
     color: #555;
     margin-top: 5px;
     text-align: center;
+}
+
+.steps-counter {
+    font-size: 1em;
+    color: #333;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+@media (max-width: 767px) {
+    .controls button, .controls select {
+        flex: 1 1 100%;
+        max-width: 300px;
+    }
 }

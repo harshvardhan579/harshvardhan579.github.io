@@ -28,12 +28,15 @@
     </div>
 
     <div class="animation-section">
-        <!-- Controls -->
+        <!-- The Three.js Canvas will be appended here by script.js -->
+
+        <!-- Controls and steps counter are now properly nested within animation-section -->
         <div class="controls">
             <button id="addObstacleBtn" class="active">Add Obstacles</button>
             <button id="addRobotBtn">Add Robots</button>
             <button id="startBtn">Start Awakening</button>
-            <button id="resetBtn">Reset</button>
+            <button id="resetAnimationBtn">Reset Animation</button>
+            <button id="resetBtn">Reset All</button>
             <select id="algorithmSelect">
                 <option value="greedyStatic">Greedy Static</option>
                 <option value="greedyDynamic">Greedy Dynamic</option>
@@ -43,7 +46,10 @@
         <div class="instructions">
             Click on the canvas to add items. Click again on the active button to deselect. Select a robot to start. Choose an algorithm from the dropdown.
         </div>
-        <!-- The Three.js Canvas will be appended here by script.js -->
+        <!-- Steps counter -->
+        <div class="steps-counter">
+            Steps Taken: <span id="stepsDisplay">0</span>
+        </div>
     </div>
 </div>
 
