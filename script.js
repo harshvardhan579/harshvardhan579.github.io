@@ -544,7 +544,30 @@ function assignPathsClustering() {
     awakeRobots.forEach((robotObj) => {
         if (!robotObj.cluster && clusters.length > 0) {
             // Assign the next cluster to this robot
-            robotObj.cluster = clusters.shift();
+            let minDistance = Infinity;
+            let closestCluster = null;
+            let clusterIndex = 0;
+            clusters.forEach((c) => {
+                c.forEach((r) => {
+                    const startGridPos = worldToGrid(robotObj.mesh.position);
+                    const endGridPos = worldToGrid(r.mesh.position);
+                    const path = aStar.findPath(startGridPos, endGridPos);
+
+                    if (path && path.length < minDistance) {
+                        minDistance = path.length;
+                        closestRobot = r;
+                        closestCluster = clusterIndex
+                    }
+                });
+                clusterIndex++
+            });
+            if (closestCluster){
+                const [extractedCluster] = clusters.splice(closestCluster, 1);
+                robotObj.cluster = extractedCluster;
+            }
+            else {
+                robotObj.cluster = clusters.shift();
+            }
         }
 
         if (!robotObj.target && robotObj.cluster) {
