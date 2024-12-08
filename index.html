@@ -51,6 +51,29 @@
 
         <p>The clustering algorithm chosen is DBScan, which is a popular density based algorithm, chosen because we only care about clustering points that are neighboring each other. The algorithm takes two hyperparameters: eps and minPoints. The former is the maximum distance where two points may be considered neighbors and the latter refers to the minimum number of neighbors required for a point to be considered a core point. The algorithm begins by classifying each point as either a core, border, or noise point. Core points have at least minPoints neighbors within eps range. All other points are considered noise or border points, where border points are neighbors of core points and noise points are not. Finally, clusters are generated recursively from all core points and their neighbors. The efficiency and effectiveness of this algorithm is dependent on the hyperparameters and the dataset. In the worst case, the algorithm will generate one cluster with n points or n clusters with 1 point, running in O(n2) time, whereas the best case will perform this clustering efficiently in O(nlogn) time.</p>
     
+        <h2>Links</h2>
+
+        <a href="https://docs.google.com/presentation/d/1uwEN7rwknYENfzLyzCqz3MIcUauHH0dQJsUa5pprFeg/edit?usp=sharing">Final Presentation</a><br>
+
+        <a href="">Video Presentation</a><br>
+
+        <h2>References</h2>
+
+        
+        <a href="https://www.researchgate.net/publication/226267005_A_Neighborhood_Search_Technique_for_the_Freeze_Tag_Problem">A Neighborhood Search Technique for the Freeze Tag Problem</a><br>
+        <a href="https://link.springer.com/chapter/10.1007/3-540-45471-3_28">Analysis of Heuristics of the Freeze Tag Problem</a><br>
+        <a href="https://www.kdnuggets.com/2020/04/dbscan-clustering-algorithm-machine-learning.html">DBScan Clustering Algorithm in Machine Learning</a><br>
+
+        <p>Student project we drew inspiration from</p>
+        <a href="https://cs.rit.edu/%7Emem8524/716_project.html">Exploration of the Robot Swarm Problem</a><br>
+
+        <h2>Timeline</h2>
+        <p><b>Weeks 4-6:</b> Initial problem and algorithm research</p>
+        <p><b>Weeks 7-10:</b> Greedy algorithm implementation. Basic webpage development.</p>
+        <p><b>Weeks 11-14:</b> Clustering Algorithm implementation. Web animation reasearch and development.</p>
+        <p><b>Week 15:</b> Final Webpage and presentation complete</p>
+
+
     </div>
 
     <div class="animation-section">
