@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Harshvardhan Singh — Retro-Future Editorial Engineering Archive
 
-## Getting Started
+The official personal portfolio and engineering case-study dossier platform of **Harshvardhan Singh** (**AI Engineer · Software Engineer**).
 
-First, run the development server:
+Designed in the **Retro-Future Editorial** aesthetic: a synthesis of 1980s technical engineering journals, archival dossiers, and print typesetting paired with 2026 spring physics, in-place archival card transitions, and strict zero-cliché minimalism.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🎨 Visual Identity: Paper & Ink
+
+- **Primary Paper Base**: `#F3EBDD` (Warm off-white with subtle print grain)
+- **Secondary Paper / Active Sheets**: `#E8DDCA` & `#FAF6ED`
+- **Primary Ink**: `#1D1511` (Very dark warm brown)
+- **Rules & Separators**: `#BEB09C` (Printed double and single rules)
+- **Accents**: Restrained `#8C4432` (Aged rust) & `#96754E` (Aged brass)
+- **Typography**: [Newsreader](https://fonts.google.com/specimen/Newsreader) (Editorial Serif) + [IBM Plex Mono](https://fonts.google.com/specimen/IBM+Plex+Mono) (Technical Typewriter Monospace) + [Inter](https://fonts.google.com/specimen/Inter)
+
+---
+
+## 🏛️ Website Architecture: Compact 3-Screen Flow
+
+The homepage drastically reduces vertical scroll down to **~2.3 viewports** by introducing an in-place **Portfolio Desk**:
+
+```text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ SCREEN 1: HERO MASTHEAD                                                     │
+│ THE HARSHVARDHAN SINGH ARCHIVE · VOL. 01 · 2026                             │
+│ Large Serif Headline · Value Statement · Layered Archival Metadata Card    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ SCREEN 2: PORTFOLIO DESK (Interactive Archival Tab Folio)                   │
+│ ┌───────────────┬─────────────────────────────────────────────────────────┐ │
+│ │ 01 WORK       │ Flagship Project Deck (APILoom, CivicPulse, etc.)       │ │
+│ │ 02 EXPERIENCE │ Big Vision (10K+ uploads/day) & Penn State              │ │
+│ │ 03 SKILLS     │ 3-Column Typographical Capability Inventory             │ │
+│ │ 04 EDUCATION  │ RIT (MS CS) & Penn State (BS CS) Academic Records       │ │
+│ │ 05 PROFILE    │ Biography, 4 Focus Disciplines & 4 Core Tenets          │ │
+│ └───────────────┴─────────────────────────────────────────────────────────┘ │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ SCREEN 3: COMPACT DISPATCH / CONTACT CLOSING                                │
+│ Direct correspondence actions (Email, Résumé PDF, LinkedIn, GitHub)         │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Dedicated Archive Route (`/projects`)**: Searchable full table archive of all 8 production systems and experiments with category filtering.
+- **Deep-Dive Case Study Dossiers (`/projects/[slug]`)**: Tabbed dossier interface (`OVERVIEW`, `ARCHITECTURE`, `AI / ML`, `DECISIONS`, `CHALLENGES`, `RESULTS`) with printable monochrome schematics.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ⚡ Tech Stack
 
-## Learn More
+- **Framework**: [Next.js 16 (App Router)](https://nextjs.org/) + React 19
+- **Language**: [TypeScript (Strict Mode)](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) + CSS Custom Properties Design Tokens
+- **Motion & 3D Physics**: [Framer Motion](https://www.framer.com/motion/) (with `prefers-reduced-motion` compliance)
+- **Icons**: Restrained [Lucide React](https://lucide.dev/) + Custom SVG brand marks
+- **Testing**: [Vitest](https://vitest.dev/) (Unit) + [Playwright](https://playwright.dev/) (E2E & Visual QA)
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🚀 Quick Start
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 1. Install Dependencies
+```bash
+npm install
+```
 
-## Deploy on Vercel
+### 2. Run Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 3. Run Production Build
+```bash
+npm run build
+npm run start
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🧪 Testing & Quality Assurance
+
+```bash
+# Run Vitest unit tests
+npm run test
+
+# Run ESLint check
+npm run lint
+
+# Run TypeScript typecheck
+npx tsc --noEmit
+
+# Run Playwright E2E and visual tests (Desktop 1440x900 & Mobile 390x844)
+npx playwright test
+```
+
+---
+
+## 🔒 Zero Fabrication Safety
+All external links (GitHub repos, LinkedIn, Email, Résumé PDF) are configured in `src/data/social.ts` and `src/data/projects.ts`. Any link marked with `TODO_` is automatically and cleanly omitted from the UI to prevent broken links.
+
+---
+
+## 📄 License
+MIT © Harshvardhan Singh
